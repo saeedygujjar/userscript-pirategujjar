@@ -11,7 +11,7 @@
 // @grant        GM_setValue
 // @grant        GM.getValue
 // @grant        GM.setValue
-// @grant        none
+// @grant        all
 // @license      MIT License
 // @run-at       document-start
 // ==/UserScript==
@@ -135,141 +135,7 @@
         return blacklisted;
     }
 
-    // Preferences
-    if (window.location.hostname.toLowerCase() == "anonymousmeerkat.github.io" &&
-        window.location.href.indexOf("anonymousmeerkat.github.io/inject2download/prefs.html") >= 0 &&
-        !did_prefs) {
-        run_on_load(function() {
-            var text = [
-                "<html><head><title>Inject2Download Preferences</title></head><body style='margin:0;padding:1em'>",
-                "<div style='width:100%'><h2>Inject2Download</h2></div>",
-                "<div id='prefs'></div>",
-                "<div id='save'><button id='savebtn'>Save</button><br /><span id='savetxt'></span></div>",
-                "</body></html>"
-            ].join("");
-            document.documentElement.innerHTML = text;
-
-            var prefs = document.getElementById("prefs");
-            prefs.appendChild(document.createElement("hr"));
-            for (var key in config_template) {
-                var template = config_template[key];
-
-                var prefdiv = document.createElement("div");
-                prefdiv.id = "pref-" + key;
-                prefdiv.style.paddingBottom = "1em";
-                var title = document.createElement("div");
-                title.style.paddingBottom = ".5em";
-                title.innerHTML = template.name;
-                prefdiv.appendChild(title);
-
-                if (typeof template.default === "boolean" ||
-                    "options" in template) {
-                    var options = template.options;
-                    if (typeof template.default === "boolean") {
-                        options = {
-                            "true": "Yes",
-                            "false": "No"
-                        };
-                    }
-
-                    for (var option in options) {
-                        var input = document.createElement("input");
-                        input.name = key;
-                        input.value = option;
-                        input.type = "radio";
-                        input.id = key + "-" + option;
-
-                        if (config[key].toString() === option)
-                            input.setAttribute("checked", true);
-
-                        var label = document.createElement("label");
-                        label.setAttribute("for", input.id);
-                        label.innerHTML = options[option];
-
-                        prefdiv.appendChild(input);
-                        prefdiv.appendChild(label);
-                        prefdiv.appendChild(document.createElement("br"));
-                    }
-                } else if (template.type === "textarea") {
-                    var input = document.createElement("textarea");
-                    input.name = key;
-                    input.style.width = "30em";
-                    input.style.height = "10em";
-                    input.innerHTML = config[key];
-
-                    prefdiv.appendChild(input);
-                } else {
-                    var input = document.createElement("input");
-                    input.name = key;
-                    input.value = config[key];
-                    input.style.width = "30em";
-
-                    prefdiv.appendChild(input);
-                }
-
-                prefs.appendChild(prefdiv);
-                prefs.appendChild(document.createElement("hr"));
-            }
-
-            document.getElementById("savebtn").onclick = function() {
-                for (var key in config_template) {
-                    var els = document.getElementsByName(key);
-                    var value = undefined;
-                    if (els.length > 1) {
-                        // radio
-                        for (var i = 0; i < els.length; i++) {
-                            if (els[i].checked) {
-                                value = els[i].value;
-                                if (value === "true")
-                                    value = true;
-                                if (value === "false")
-                                    value = false;
-                                break;
-                            }
-                        }
-                    } else {
-                        if (els[0].tagName === "INPUT") {
-                            value = els[0].value;
-                        } else if (els[0].tagName === "TEXTAREA") {
-                            value = els[0].value;
-                        }
-                    }
-                    console.log("[i2d] " + key + " = " + value);
-
-                    if (typeof GM_setValue !== "undefined")
-                        GM_setValue(key, value);
-                    else if (typeof GM !== "undefined" && GM.setValue)
-                        GM.setValue(key, value);
-                }
-                document.getElementById("savetxt").innerHTML = "Saved!";
-                setTimeout(function() {
-                    document.getElementById("savetxt").innerHTML = "";
-                }, 3000);
-            };
-
-            console.log("[i2d] Finished rendering preferences page");
-        });
-        did_prefs = true;
-    }
-
-    check_blacklisted();
-
-    // Helper functions
-    function run_on_load(f) {
-        if (document.readyState === "complete" ||
-            document.readyState === "interactive") {
-            f();
-        } else {
-            var listener = function() {
-                if (document.readyState === "complete" ||
-                    document.readyState === "interactive") {
-                    f();
-
-                    document.removeEventListener("readystatechange", listener);
-                }
-            };
-
-            document.addEventListener("readystatechange", listener);
+   
             //document.addEventListener('DOMContentLoaded', f, false);
             //window.addEventListener('load', f, false);
         }
