@@ -6,8 +6,7 @@
 // @author       Saeed Akbar
 // @match        *://*
 // @include      *
-// @match.       https://*/*
-// @run-at       dacument-start
+// @match        https://*/*
 // @grant        none
 // ==/UserScript==
 
