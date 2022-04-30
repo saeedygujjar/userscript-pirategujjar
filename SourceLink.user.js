@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name SoudceLink
-// @version 1
-//@author   PirateGujjad
+// @name  SourceLink
+// @version 10.0
+// @author   PirateGujjad
 // @license LGPL-3.0; https://github.com/AdguardTeam/PopupBlocker/blob/master/LICENSE
 // @downloadURL https://userscripts.adtidy.org/beta/popup-blocker/2.5/popupblocker.user.js
 // @updateURL https://userscripts.adtidy.org/beta/popup-blocker/2.5/popupblocker.meta.js
